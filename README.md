@@ -1,13 +1,6 @@
-<div align="center">
-
-![pixel wave](https://raw.githubusercontent.com/rizxfrog/rizxfrog/main/assets/wave.svg)
-
-**insightfully doing everything.**
-
-[![email](https://img.shields.io/badge/Email-brightonfermin%40gmail.com-8B5CF6?style=flat-square&logo=gmail&logoColor=white)](mailto:brightonfermin@gmail.com)
-[![school](https://img.shields.io/badge/School-YOUR_SCHOOL-6D28D9?style=flat-square)](https://your-school.edu.cn)
-
-</div>
+<p align="center">
+  <img src="./assets/github-profile-banner.svg" width="100%" alt="GitHub Profile Banner" />
+</p>
 
 ---
 
