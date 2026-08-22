@@ -14,11 +14,12 @@ Seeking for a job now.
 
 ## 🌟 Spotlight — YOUR_PROJECT
 
-[**⬇ Download**](https://github.com/rizxfrog/YOUR_PROJECT/releases/latest)  ·  [**⭐ Star on GitHub**](https://github.com/rizxfrog/YOUR_PROJECT)
+[**skill：insightful**](https://github.com/rizxfrog/insightful)
 
 ---
 
-📫 **YOU@school.edu.cn** · welcome to reach out!
+📫 **brightonfermin@gmail.com** · welcome to reach out!
+📫 **3274379673@qq.com** · appreciated if you can give me a job!
 
 <div align="center">
 
