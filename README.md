@@ -8,7 +8,7 @@ Seeking for a job now.
 
 ## 🛠️ Tech Stack
 
-[![stack](https://skillicons.dev/icons?i=swift,rust,ts,react,python,kotlin,cpp,c,fastapi,tauri,vue,nodejs,mysql,git,linux,vscode&perline=8)](https://skillicons.dev)
+[![stack](https://skillicons.dev/icons?i=linux,java,python,go,ts,bun,c,postgresql,redis,rabbitmq&perline=8)](https://skillicons.dev)
 
 ---
 
