@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/github-profile-banner.svg" width="100%" alt="GitHub Profile Banner" />
+  <img src="./assets/gswarm.svg" width="100%" alt="GitHub Profile Banner" />
 </p>
 
 ---
