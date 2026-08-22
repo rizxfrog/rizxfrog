@@ -4,24 +4,30 @@
 
 ---
 
-### 👋 Hi
+## 👋 About me
 
-我是 **YOUR NAME**，YOUR_SCHOOL 软件工程在读。喜欢终端，也喜欢为终端里的人造工具。
+Hello everyone,
 
-目前在打磨 **[insightful](https://github.com/rizxfrog/insightful)** —— insightfully doing everything.
+I want to make great things.
 
-### 🛠 Stack
+Seeking for a job now.
 
-`Java` · `Go` · `Python` · `Kotlin` · `TypeScript`
+## 🛠️ Tech Stack
 
-### ⭐ insightful
-
-- 🧠 一个想法驱动的探索型项目
-- 🔧 用得顺手比看起来漂亮更重要
-- 🤝 欢迎 issue / PR
-
-[**Star →**](https://github.com/rizxfrog/insightful)
+[![stack](https://skillicons.dev/icons?i=swift,rust,ts,react,python,kotlin,cpp,c,fastapi,tauri,vue,nodejs,mysql,git,linux,vscode&perline=8)](https://skillicons.dev)
 
 ---
 
-📫 brightonfermin@gmail.com
+## 🌟 Spotlight — YOUR_PROJECT
+
+[**⬇ Download**](https://github.com/rizxfrog/YOUR_PROJECT/releases/latest)  ·  [**⭐ Star on GitHub**](https://github.com/rizxfrog/YOUR_PROJECT)
+
+---
+
+📫 **YOU@school.edu.cn** · welcome to reach out!
+
+<div align="center">
+
+![visitors](https://visitor-badge.laobi.icu/badge?page_id=rizxfrog.rizxfrog&left_color=2268F7&right_color=5EEAD4)
+
+</div>
