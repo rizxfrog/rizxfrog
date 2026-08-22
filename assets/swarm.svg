@@ -1,0 +1,265 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title description">
+  <title id="title">Interactive particle swarm</title>
+  <desc id="description">A flock of glowing particles that moves autonomously and follows the pointer when it enters the image.</desc>
+
+  <defs>
+    <radialGradient id="background" cx="50%" cy="45%" r="75%">
+      <stop offset="0" stop-color="#142c55"/>
+      <stop offset="0.56" stop-color="#07162f"/>
+      <stop offset="1" stop-color="#030817"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#38bdf8" stop-opacity=".7"/>
+      <stop offset=".5" stop-color="#818cf8" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#2dd4bf" stop-opacity=".65"/>
+    </linearGradient>
+    <filter id="softGlow" x="-400%" y="-400%" width="800%" height="800%">
+      <feGaussianBlur stdDeviation="2.6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="cursorGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="11"/>
+    </filter>
+    <clipPath id="frameClip">
+      <rect x="1" y="1" width="1198" height="358" rx="24"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#frameClip)">
+    <rect width="1200" height="360" fill="url(#background)"/>
+    <path d="M0 283C167 223 272 334 431 274S746 188 905 251s221 27 295-14v123H0Z" fill="#0ea5e9" opacity=".035"/>
+    <path d="M0 80C144 132 276 18 423 75s284 78 421 14 260-35 356 16V0H0Z" fill="#8b5cf6" opacity=".035"/>
+
+    <g id="trails" opacity=".22" stroke-linecap="round"/>
+    <g id="particles" filter="url(#softGlow)"/>
+
+    <circle id="cursorAura" cx="600" cy="180" r="34" fill="#67e8f9" opacity="0" filter="url(#cursorGlow)" pointer-events="none"/>
+    <circle id="cursorRing" cx="600" cy="180" r="18" fill="none" stroke="#a5f3fc" stroke-width="1" opacity="0" pointer-events="none"/>
+
+    <g fill="#dbeafe" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" pointer-events="none">
+      <text x="38" y="51" font-size="16" letter-spacing="3" opacity=".88">SWARM / BOIDS</text>
+      <text id="modeLabel" x="38" y="76" font-size="11" letter-spacing="1.4" opacity=".46">AUTONOMOUS · MOVE POINTER HERE</text>
+    </g>
+  </g>
+
+  <rect x="1" y="1" width="1198" height="358" rx="24" fill="none" stroke="url(#edge)" stroke-width="2"/>
+
+  <script><![CDATA[
+    (() => {
+      'use strict';
+
+      const svg = document.documentElement;
+      const particleLayer = document.getElementById('particles');
+      const trailLayer = document.getElementById('trails');
+      const cursorAura = document.getElementById('cursorAura');
+      const cursorRing = document.getElementById('cursorRing');
+      const modeLabel = document.getElementById('modeLabel');
+      const NS = 'http://www.w3.org/2000/svg';
+      const WIDTH = 1200;
+      const HEIGHT = 360;
+      const COUNT = 82;
+      const MARGIN = 22;
+      const particles = [];
+      const pointer = { x: WIDTH / 2, y: HEIGHT / 2, active: false };
+      const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+      const magnitude = (x, y) => Math.hypot(x, y) || 0.0001;
+
+      function limit(vector, maximum) {
+        const length = magnitude(vector.x, vector.y);
+        if (length > maximum) {
+          vector.x = vector.x / length * maximum;
+          vector.y = vector.y / length * maximum;
+        }
+        return vector;
+      }
+
+      function makeSvgElement(name, attributes) {
+        const element = document.createElementNS(NS, name);
+        for (const [key, value] of Object.entries(attributes)) element.setAttribute(key, value);
+        return element;
+      }
+
+      for (let index = 0; index < COUNT; index += 1) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 0.35 + Math.random() * 0.75;
+        const hue = 183 + Math.random() * 62;
+        const size = 1.25 + Math.random() * 1.8;
+        const x = 170 + Math.random() * (WIDTH - 340);
+        const y = 65 + Math.random() * (HEIGHT - 130);
+        const trail = makeSvgElement('line', {
+          x1: x, y1: y, x2: x, y2: y,
+          stroke: `hsl(${hue} 92% 70%)`,
+          'stroke-width': Math.max(0.55, size * 0.48)
+        });
+        const node = makeSvgElement('circle', {
+          cx: x, cy: y, r: size,
+          fill: `hsl(${hue} 95% 74%)`
+        });
+        trailLayer.appendChild(trail);
+        particleLayer.appendChild(node);
+        particles.push({
+          x, y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          ax: 0, ay: 0,
+          maxSpeed: 1.35 + Math.random() * 0.75,
+          phase: Math.random() * Math.PI * 2,
+          node, trail
+        });
+      }
+
+      function steerTowards(particle, x, y, strength) {
+        const dx = x - particle.x;
+        const dy = y - particle.y;
+        const distance = magnitude(dx, dy);
+        const desiredSpeed = particle.maxSpeed * clamp(distance / 85, 0.22, 1);
+        return {
+          x: (dx / distance * desiredSpeed - particle.vx) * strength,
+          y: (dy / distance * desiredSpeed - particle.vy) * strength
+        };
+      }
+
+      function animate(timestamp) {
+        const time = timestamp * 0.001;
+        const autonomousTarget = {
+          x: WIDTH / 2 + Math.sin(time * 0.47) * 330 + Math.sin(time * 1.09) * 85,
+          y: HEIGHT / 2 + Math.cos(time * 0.61) * 92 + Math.sin(time * 0.83) * 35
+        };
+        const target = pointer.active ? pointer : autonomousTarget;
+
+        for (let i = 0; i < particles.length; i += 1) {
+          const particle = particles[i];
+          let alignX = 0;
+          let alignY = 0;
+          let cohesionX = 0;
+          let cohesionY = 0;
+          let separationX = 0;
+          let separationY = 0;
+          let nearby = 0;
+          let close = 0;
+
+          for (let j = 0; j < particles.length; j += 1) {
+            if (i === j) continue;
+            const other = particles[j];
+            const dx = other.x - particle.x;
+            const dy = other.y - particle.y;
+            const distanceSquared = dx * dx + dy * dy;
+
+            if (distanceSquared < 62 * 62) {
+              alignX += other.vx;
+              alignY += other.vy;
+              cohesionX += other.x;
+              cohesionY += other.y;
+              nearby += 1;
+            }
+            if (distanceSquared < 22 * 22 && distanceSquared > 0.01) {
+              separationX -= dx / distanceSquared;
+              separationY -= dy / distanceSquared;
+              close += 1;
+            }
+          }
+
+          particle.ax = 0;
+          particle.ay = 0;
+
+          if (nearby) {
+            const alignment = limit({
+              x: alignX / nearby - particle.vx,
+              y: alignY / nearby - particle.vy
+            }, 0.035);
+            const cohesion = steerTowards(
+              particle,
+              cohesionX / nearby,
+              cohesionY / nearby,
+              0.0075
+            );
+            particle.ax += alignment.x + cohesion.x;
+            particle.ay += alignment.y + cohesion.y;
+          }
+
+          if (close) {
+            const separation = limit({
+              x: separationX / close,
+              y: separationY / close
+            }, 0.095);
+            particle.ax += separation.x;
+            particle.ay += separation.y;
+          }
+
+          const attraction = steerTowards(particle, target.x, target.y, pointer.active ? 0.021 : 0.006);
+          particle.ax += attraction.x;
+          particle.ay += attraction.y;
+
+          particle.ax += Math.cos(time * 1.4 + particle.phase) * 0.0035;
+          particle.ay += Math.sin(time * 1.1 + particle.phase) * 0.0035;
+
+          if (particle.x < MARGIN) particle.ax += 0.06;
+          if (particle.x > WIDTH - MARGIN) particle.ax -= 0.06;
+          if (particle.y < MARGIN) particle.ay += 0.06;
+          if (particle.y > HEIGHT - MARGIN) particle.ay -= 0.06;
+        }
+
+        for (const particle of particles) {
+          const oldX = particle.x;
+          const oldY = particle.y;
+          particle.vx += particle.ax;
+          particle.vy += particle.ay;
+          const velocity = limit({ x: particle.vx, y: particle.vy }, particle.maxSpeed);
+          particle.vx = velocity.x;
+          particle.vy = velocity.y;
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+
+          particle.node.setAttribute('cx', particle.x.toFixed(2));
+          particle.node.setAttribute('cy', particle.y.toFixed(2));
+          particle.trail.setAttribute('x1', (oldX - particle.vx * 5).toFixed(2));
+          particle.trail.setAttribute('y1', (oldY - particle.vy * 5).toFixed(2));
+          particle.trail.setAttribute('x2', particle.x.toFixed(2));
+          particle.trail.setAttribute('y2', particle.y.toFixed(2));
+        }
+
+        if (!prefersReducedMotion) requestAnimationFrame(animate);
+      }
+
+      function updatePointer(event) {
+        const point = new DOMPoint(event.clientX, event.clientY);
+        const localPoint = point.matrixTransform(svg.getScreenCTM().inverse());
+        pointer.x = clamp(localPoint.x, MARGIN, WIDTH - MARGIN);
+        pointer.y = clamp(localPoint.y, MARGIN, HEIGHT - MARGIN);
+        cursorAura.setAttribute('cx', pointer.x);
+        cursorAura.setAttribute('cy', pointer.y);
+        cursorRing.setAttribute('cx', pointer.x);
+        cursorRing.setAttribute('cy', pointer.y);
+      }
+
+      svg.addEventListener('pointerenter', event => {
+        pointer.active = true;
+        updatePointer(event);
+        cursorAura.setAttribute('opacity', '.14');
+        cursorRing.setAttribute('opacity', '.72');
+        modeLabel.textContent = 'TRACKING POINTER · LEAVE TO RELEASE';
+      });
+
+      svg.addEventListener('pointermove', updatePointer);
+
+      svg.addEventListener('pointerleave', () => {
+        pointer.active = false;
+        cursorAura.setAttribute('opacity', '0');
+        cursorRing.setAttribute('opacity', '0');
+        modeLabel.textContent = 'AUTONOMOUS · MOVE POINTER HERE';
+      });
+
+      if (prefersReducedMotion) {
+        modeLabel.textContent = 'REDUCED MOTION ENABLED';
+        animate(0);
+      } else {
+        requestAnimationFrame(animate);
+      }
+    })();
+  ]]></script>
+</svg>
