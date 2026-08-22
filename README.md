@@ -1,6 +1,6 @@
 <div align="center">
 
-![banner](https://capsule-render.vercel.app/api?type=rect&color=6D28D9,8B5CF6,A78BFA&height=160&section=header&text=YOUR%20NAME&fontColor=ffffff&fontSize=48&fontAlign=50&animation=fadeIn)
+![pixel wave](https://raw.githubusercontent.com/rizxfrog/rizxfrog/main/assets/wave.svg)
 
 **insightfully doing everything.**
 
