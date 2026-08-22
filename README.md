@@ -1,9 +1,3 @@
-<p align="center">
-  <img src="./assets/gswarm.svg" width="100%" alt="GitHub Profile Banner" />
-</p>
-
----
-
 ## 👋 About me
 
 Hello everyone,
