@@ -1,10 +1,6 @@
 ## 👋 About me
 
-Hello everyone,
-
-I want to make great things.
-
-Seeking for a job now.
+Hello everyone.
 
 ## 🛠️ Tech Stack
 
@@ -15,12 +11,10 @@ Seeking for a job now.
 ## 🌟 Spotlight
 
 - [**skill：insightful**](https://github.com/rizxfrog/insightful)
-
+- [**CLIProxyAPI-Plus**](https://github.com/rizxfrog/CLIProxyAPI-Plus): One graceful proxy service for LLM APIs
 ---
 
-📫 **brightonfermin@gmail.com** · welcome to reach out!
-
-📫 **3274379673@qq.com** · appreciated if you can give me a job!
+📫 **3274379673@qq.com**
 
 <div align="center">
 
