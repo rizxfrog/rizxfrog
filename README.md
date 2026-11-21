@@ -14,7 +14,7 @@ Hello everyone.
 - [**CLIProxyAPI-Plus**](https://github.com/rizxfrog/CLIProxyAPI-Plus): One graceful proxy service for LLM APIs
 ---
 
-📫 **3274379673@qq.com**
+📫 **rizxlowen@icloud.com**
 
 <div align="center">
 
